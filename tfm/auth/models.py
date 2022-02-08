@@ -37,6 +37,7 @@ class User:
         return user
 
 
-    def check_password(self, password):
-        if hasattr(self, 'password'):
-            return check_password_hash(self.password, password)
+    def check_password(self, email, password):
+        user = self.find_by_email(email)
+        if user:
+            return check_password_hash(user['password'], password)

@@ -183,3 +183,12 @@ class AppTestUserModel(BaseTestClass):
             found = user.find_by_id('missing_id')
 
             self.assertFalse(found)
+
+
+    def test_check_password(self):
+        with self.app.app_context():
+            user = User()
+            user.create_user(*self.valid_user)
+
+            self.assertTrue(user.check_password('jhon@email.com', 'Upplow$1234'))
+            self.assertFalse(user.check_password('jhon@email.com', 'Uppow$1234'))
