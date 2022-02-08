@@ -26,7 +26,7 @@ class TestingConfig(BaseConfig):
 
     TESTING = True
     PRESERVE_CONTEXT_ON_EXCEPTION = False
-    DATABASE = ':memory:'
+    DATABASE = 'test.db'
 
 
 class ProductionConfig(BaseConfig):
