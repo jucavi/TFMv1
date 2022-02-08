@@ -13,7 +13,7 @@ CREATE TABLE user (
     id TEXT PRIMARY KEY,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    user_name TEXT UNIQUE NOT NULL,
+    user_name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL
 );
