@@ -21,13 +21,15 @@ class User:
             self.messages.append('Invalid Password.')
         if self.messages:
             return None
-        self._db.cursor()
         user = (str(uuid4()), first_name, last_name, user_name, email, generate_password_hash(password))
-        self._db.execute(f'INSERT INTO {self._table} VALUES (?, ?, ?, ?, ?, ?)', user)
+        with self._db as con:
+            con.execute(f'INSERT INTO {self._table} VALUES (?, ?, ?, ?, ?, ?)', user)
+            con.commit()
 
     @save_execute
     def find_by_id(self, _id):
-        user = self._db.execute(f'SELECT * FROM {self._table} WHERE id = ?', (_id, )).fetchone()
+        with self._db as con:
+            user = con.execute(f'SELECT * FROM {self._table} WHERE id = ?', (_id, )).fetchone()
         if user:
             return user
         self.messages.append('User not found.')
@@ -35,7 +37,8 @@ class User:
 
     @save_execute
     def find_by_email(self, email):
-        user = self._db.execute(f'SELECT * FROM {self._table} WHERE email = ?', (email, )).fetchone()
+        with self._db as con:
+            user = con.execute(f'SELECT * FROM {self._table} WHERE email = ?', (email, )).fetchone()
         if user:
             return user
         self.messages.append('User not found.')
