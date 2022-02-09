@@ -13,4 +13,7 @@ def create_app(environment='development'):
     from . import db
     db.init_app(app)
 
+    from .auth import auth
+    app.register_blueprint(auth.bp)
+
     return app
