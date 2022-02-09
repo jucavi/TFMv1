@@ -28,16 +28,24 @@ class User:
     @save_execute
     def find_by_id(self, _id):
         user = self._db.execute(f'SELECT * FROM {self._table} WHERE id = ?', (_id, )).fetchone()
-        return user
+        if user:
+            return user
+        self.messages.append('User not found.')
 
 
     @save_execute
     def find_by_email(self, email):
         user = self._db.execute(f'SELECT * FROM {self._table} WHERE email = ?', (email, )).fetchone()
-        return user
+        if user:
+            return user
+        self.messages.append('User not found.')
 
 
     def check_password(self, email, password):
         user = self.find_by_email(email)
         if user:
-            return check_password_hash(user['password'], password)
+            if check_password_hash(user['password'], password):
+                return True
+            else:
+                self.messages.append('Wrong password.')
+                return False
