@@ -2,6 +2,7 @@ from . import BaseTestClass
 
 from tfm.auth.models import User
 from sqlite3 import ProgrammingError
+import random
 
 class AppTestUserModel(BaseTestClass):
     def setUp(self):
@@ -84,10 +85,13 @@ class AppTestUserModel(BaseTestClass):
 
     def test_create_valid_user(self):
         with self.app.app_context():
-            user = User()
-            user.create_user(*self.valid_user)
+            user1 = User()
+            user1.create_user(*self.valid_user)
+            user2 = User()
+            user2.create_user('Juan', 'Carlos', 'jucavi', random.choice(self.valid_emails), random.choice(self.valid_passwords))
 
-            self.assertEqual(user.messages, [])
+            self.assertEqual(user1.messages, [])
+            self.assertEqual(user2.messages, [])
 
     def test_create_user_without_required_fields(self):
         with self.app.app_context():
