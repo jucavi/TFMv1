@@ -1,7 +1,7 @@
 from . import BaseTestClass
 
 from tfm.auth.models import User
-from sqlite3 import ProgrammingError
+from sqlite3 import ProgrammingError, Row
 import random
 
 class AppTestUserModel(BaseTestClass):
@@ -197,7 +197,9 @@ class AppTestUserModel(BaseTestClass):
             user = User()
             user.create_user(*self.valid_user)
 
-            self.assertTrue(user.check_password('jhon@email.com', 'Upplow$1234'))
+            found = user.check_password('jhon@email.com', 'Upplow$1234')
+            self.assertIsInstance(found, Row)
+            self.assertTrue(found['first_name'], 'Jhon')
             self.assertEqual(user.messages, [])
 
             self.assertFalse(user.check_password('jhon@mail.com', 'Upplow$1234'))
