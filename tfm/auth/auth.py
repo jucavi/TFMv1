@@ -10,11 +10,11 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     if request.method == 'POST':
         user = User()
-        user.create_user(*request.form)
+        user.create_user(*request.form.values())
         if not user.messages:
-            print(url_for('auth.login'))
+            flash('User successfully registered')
             return redirect(url_for('auth.login'))
-        flash(user.messages)
+        flash(*user.messages)
     return render_template('auth/register.html')
 
 
