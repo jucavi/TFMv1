@@ -144,6 +144,7 @@ class AppTestUserModel(BaseTestClass):
             user.create_user(*self.valid_user)
             found = user.find_by_email('jhon@email.com')
 
+            self.assertEqual(user.messages, [])
             self.assertEqual(found['first_name'], 'Jhon')
 
 
@@ -152,6 +153,7 @@ class AppTestUserModel(BaseTestClass):
             user = User()
             found = user.find_by_email('missing_mail')
 
+            self.assertEqual(user.messages, ['User not found.'])
             self.assertFalse(found)
 
 
@@ -182,6 +184,7 @@ class AppTestUserModel(BaseTestClass):
             user = User()
             found = user.find_by_id('missing_id')
 
+            self.assertEqual(user.messages, ['User not found.'])
             self.assertFalse(found)
 
 
@@ -191,4 +194,10 @@ class AppTestUserModel(BaseTestClass):
             user.create_user(*self.valid_user)
 
             self.assertTrue(user.check_password('jhon@email.com', 'Upplow$1234'))
+            self.assertEqual(user.messages, [])
+
+            self.assertFalse(user.check_password('jhon@mail.com', 'Upplow$1234'))
+            self.assertIn('User not found.', user.messages)
+
             self.assertFalse(user.check_password('jhon@email.com', 'Uppow$1234'))
+            self.assertIn('Wrong password.', user.messages)
