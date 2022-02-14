@@ -31,7 +31,8 @@ class User:
         with self._db as con:
             user = con.execute(f'SELECT * FROM {self._table} WHERE id = ?', (_id, )).fetchone()
         if user:
-            return user
+            self.user = user
+            return self.user
         self.messages.append('User not found.')
 
 
@@ -40,7 +41,8 @@ class User:
         with self._db as con:
             user = con.execute(f'SELECT * FROM {self._table} WHERE email = ?', (email, )).fetchone()
         if user:
-            return user
+            self.user = user
+            return self.user
         self.messages.append('User not found.')
 
 
@@ -48,7 +50,8 @@ class User:
         user = self.find_by_email(email)
         if user:
             if check_password_hash(user['password'], password):
-                return True
+                self.user = user
+                return self.user
             else:
                 self.messages.append('Wrong password.')
                 return False

@@ -58,7 +58,6 @@ CREATE TABLE data (
 CREATE TABLE dataset (
     data_id TEXT NOT NULL,
     project_id TEXT NOT NULL,
-    role_id TEXT NOT NULL,
     FOREIGN KEY (data_id) REFERENCES data (id),
     FOREIGN KEY (project_id) REFERENCES project (id)
 );
